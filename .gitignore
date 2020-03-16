@@ -1,2 +1,2 @@
-sql/dbconfig.yml
-src/database/database.go
+/sql/dbconfig.yml
+/src/database/database.go
