@@ -11,6 +11,7 @@ import (
 
 type ScheduleHandler interface {
 	Index(c *gin.Context)
+	New(c *gin.Context)
 	Create(c *gin.Context)
 }
 
@@ -25,6 +26,10 @@ func NewScheduleHandler() ScheduleHandler {
 func (handler scheduleHandler) Index(c *gin.Context) {
 	schedules, _ := database.DB.FindAllSchedules()
 	c.JSON(http.StatusOK, schedules)
+}
+
+func (handler scheduleHandler) New(c *gin.Context) {
+	c.HTML(http.StatusOK, "schedules/new.html", gin.H{})
 }
 
 func (handler scheduleHandler) Create(c *gin.Context) {

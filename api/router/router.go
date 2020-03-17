@@ -6,12 +6,13 @@ import (
 )
 
 func New() *gin.Engine {
-	r := gin.Default()
+	router := gin.Default()
 	scheduleHandler := handler.NewScheduleHandler()
-	scheduleGroup := r.Group("/schedules")
+	scheduleGroup := router.Group("/schedules")
 	{
 		scheduleGroup.GET("", scheduleHandler.Index)
+		scheduleGroup.GET("/new", scheduleHandler.New)
 		scheduleGroup.POST("", scheduleHandler.Create)
 	}
-	return r
+	return router
 }
