@@ -14,6 +14,7 @@ type ScheduleHandler interface {
 	Show(c *gin.Context)
 	New(c *gin.Context)
 	Create(c *gin.Context)
+	Destroy(c *gin.Context)
 }
 
 type scheduleHandler struct{}
@@ -68,4 +69,21 @@ func (handler scheduleHandler) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, schedule)
+}
+
+func (handler scheduleHandler) Destroy(c *gin.Context) {
+	id, e := strconv.Atoi(c.Param("id"))
+	if e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	if e := database.DB.DeleteScheduleByID(id); e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	c.JSON(http.StatusNoContent, gin.H{})
 }

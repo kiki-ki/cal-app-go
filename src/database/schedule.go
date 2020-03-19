@@ -26,3 +26,11 @@ func (d *db) CreateSchedule(schedule model.Schedule) error {
 	}
 	return nil
 }
+
+func (d *db) DeleteScheduleByID(id int) error {
+	var schedule model.Schedule
+	if e := d.orm.Where("id = ?", id).Delete(&schedule).Error; e != nil {
+		return e
+	}
+	return nil
+}

@@ -14,6 +14,7 @@ func New() *gin.Engine {
 		scheduleGroup.GET("/:id", scheduleHandler.Show)
 		//scheduleGroup.GET("/new", scheduleHandler.New)
 		scheduleGroup.POST("", scheduleHandler.Create)
+		scheduleGroup.DELETE("/:id", scheduleHandler.Destroy)
 	}
 	return router
 }
