@@ -20,6 +20,9 @@ func (d *db) FindScheduleByID(id int) (model.Schedule, error) {
 	return schedule, nil
 }
 
-func (d *db) CreateSchedule(schedule model.Schedule) {
-	d.orm.Create(&schedule)
+func (d *db) CreateSchedule(schedule model.Schedule) error {
+	if e := d.orm.Create(&schedule).Error; e != nil {
+		return e
+	}
+	return nil
 }

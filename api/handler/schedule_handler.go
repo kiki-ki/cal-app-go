@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kiki-ki/cal-app-go/src/database"
@@ -54,8 +53,19 @@ func (handler scheduleHandler) New(c *gin.Context) {
 }
 
 func (handler scheduleHandler) Create(c *gin.Context) {
-	timeNow := time.Now()
-	schedule := model.Schedule{Title: "aaa", FromDate: &timeNow, ToDate: &timeNow}
-	database.DB.CreateSchedule(schedule)
+	var schedule model.Schedule
+	e := c.BindJSON(&schedule)
+	if e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	if e := database.DB.CreateSchedule(schedule); e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
 	c.JSON(http.StatusCreated, schedule)
 }

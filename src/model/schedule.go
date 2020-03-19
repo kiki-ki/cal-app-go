@@ -4,11 +4,11 @@ import "time"
 
 type Schedule struct {
 	ID        int
-	Title     string
-	SubTitle  string
-	Place     string
-	FromDate  *time.Time
-	ToDate    *time.Time
+	Title     string     `json:"title"`
+	SubTitle  string     `json:"sub-title"`
+	Place     string     `json:"place"`
+	FromDate  *time.Time `json:"from-date"`
+	ToDate    *time.Time `json:"to-date"`
 	UpdatedAt *time.Time
 	CreatedAt *time.Time
 }
