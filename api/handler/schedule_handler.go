@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -55,7 +57,11 @@ func (handler scheduleHandler) New(c *gin.Context) {
 
 func (handler scheduleHandler) Create(c *gin.Context) {
 	var schedule model.Schedule
-	e := c.BindJSON(&schedule)
+	jsonData, _ := ioutil.ReadFile("../../tmp/schedule.json")
+	c.JSON(http.StatusBadRequest, gin.H{
+		"message": jsonData,
+	})
+	e := json.Unmarshal(jsonData, &schedule)
 	if e != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": e,
