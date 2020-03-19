@@ -57,12 +57,8 @@ func (handler scheduleHandler) New(c *gin.Context) {
 
 func (handler scheduleHandler) Create(c *gin.Context) {
 	var schedule model.Schedule
-	jsonData, _ := ioutil.ReadFile("../../tmp/schedule.json")
-	c.JSON(http.StatusBadRequest, gin.H{
-		"message": jsonData,
-	})
-	e := json.Unmarshal(jsonData, &schedule)
-	if e != nil {
+	bytes, _ := ioutil.ReadFile("tmp/schedule.json")
+	if e := json.Unmarshal(bytes, &schedule); e != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": e,
 		})
