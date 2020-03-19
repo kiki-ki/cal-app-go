@@ -11,7 +11,8 @@ func New() *gin.Engine {
 	scheduleGroup := router.Group("/schedules")
 	{
 		scheduleGroup.GET("", scheduleHandler.Index)
-		scheduleGroup.GET("/new", scheduleHandler.New)
+		scheduleGroup.GET("/:id", scheduleHandler.Show)
+		//scheduleGroup.GET("/new", scheduleHandler.New)
 		scheduleGroup.POST("", scheduleHandler.Create)
 	}
 	return router

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 
 type ScheduleHandler interface {
 	Index(c *gin.Context)
+	Show(c *gin.Context)
 	New(c *gin.Context)
 	Create(c *gin.Context)
 }
@@ -28,8 +30,27 @@ func (handler scheduleHandler) Index(c *gin.Context) {
 	c.JSON(http.StatusOK, schedules)
 }
 
+func (handler scheduleHandler) Show(c *gin.Context) {
+	id, e := strconv.Atoi(c.Param("id"))
+	if e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	schedule, e := database.DB.FindScheduleByID(id)
+	if e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, schedule)
+	return
+}
+
 func (handler scheduleHandler) New(c *gin.Context) {
-	c.HTML(http.StatusOK, "schedules/new.html", gin.H{})
+	c.HTML(http.StatusOK, "templates/schedules/new.html", gin.H{})
 }
 
 func (handler scheduleHandler) Create(c *gin.Context) {

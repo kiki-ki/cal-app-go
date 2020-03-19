@@ -12,6 +12,14 @@ func (d *db) FindAllSchedules() ([]model.Schedule, error) {
 	return schedules, nil
 }
 
-func (d *db) CreateSchedule(schedule model.Schedule) () {
+func (d *db) FindScheduleByID(id int) (model.Schedule, error) {
+	var schedule model.Schedule
+	if e := d.orm.Find(&schedule, id).Error; e != nil {
+		return schedule, e
+	}
+	return schedule, nil
+}
+
+func (d *db) CreateSchedule(schedule model.Schedule) {
 	d.orm.Create(&schedule)
 }
