@@ -27,6 +27,13 @@ func (d *db) CreateSchedule(schedule model.Schedule) error {
 	return nil
 }
 
+func (d *db) UpdateScheduleByID(id int, schedule model.Schedule) error {
+	var schedule model.Schedule
+	if e != d.orm.Model(&schedule).Updates(Schedule{Name: schedule.Name}); e != nil {
+
+	}
+}
+
 func (d *db) DeleteScheduleByID(id int) error {
 	var schedule model.Schedule
 	if e := d.orm.Where("id = ?", id).Delete(&schedule).Error; e != nil {

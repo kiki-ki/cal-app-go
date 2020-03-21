@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -14,8 +12,9 @@ import (
 type ScheduleHandler interface {
 	Index(c *gin.Context)
 	Show(c *gin.Context)
-	New(c *gin.Context)
+	// New(c *gin.Context)
 	Create(c *gin.Context)
+	Update(c *gin.Context)
 	Destroy(c *gin.Context)
 }
 
@@ -57,8 +56,7 @@ func (handler scheduleHandler) New(c *gin.Context) {
 
 func (handler scheduleHandler) Create(c *gin.Context) {
 	var schedule model.Schedule
-	bytes, _ := ioutil.ReadFile("tmp/schedule.json")
-	if e := json.Unmarshal(bytes, &schedule); e != nil {
+	if e := c.BindJSON(&schedule); e != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": e,
 		})
@@ -71,6 +69,26 @@ func (handler scheduleHandler) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, schedule)
+}
+
+func (handler scheduleHandler) Update(c *gin.Context) {
+	var schedule model.Schedule
+
+	if id, e := strconv.Atoi(c.Param("id")); e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	if e := c.BindJSON(&schedule); e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": e,
+		})
+		return
+	}
+	if e := database.DB.UpdateScheduleByID(id, schedule); e != nil {
+
+	}
 }
 
 func (handler scheduleHandler) Destroy(c *gin.Context) {
